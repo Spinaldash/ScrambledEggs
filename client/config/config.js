@@ -5,6 +5,7 @@ angular.module('kensu')
   $urlRouterProvider.otherwise('/');
 
   $stateProvider
-  .state('home', {url: '/', templateUrl: '/views/general/home.html'})
+  // .state('home', {url: '/', templateUrl: '/views/general/home.html'})
+  .state('gameBoard', {url: '/', templateUrl: '/views/gameBoard/gameBoard.html'})
   .state('leaderboards', {url: '/leaderboards', templateUrl: '/views/general/leaderboards.html'})
 });
