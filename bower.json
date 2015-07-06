@@ -1,0 +1,20 @@
+{
+  "name": "Kensu",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Spinaldash/Kensu",
+  "authors": [
+    "Michael Perez <blueavenger@gmail.com>"
+  ],
+  "license": "BSD",
+  "dependencies": {
+    "lodash": "~3.10.0",
+    "font-awesome": "~4.3.0",
+    "firebase": "~2.2.7",
+    "angular": "~1.4.2",
+    "angularfire": "~1.1.2",
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.5",
+    "angular-ui-router": "~0.2.15",
+    "sweetalert": "~1.0.1"
+  }
+}
