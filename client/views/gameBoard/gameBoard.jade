@@ -1,7 +1,12 @@
 div(ng-controller='GameCtrl')
   h1.text-center Scrambled Eggs GameBoard
   h2.text-center Your Word:
-  .row
-    div.text-center
+  .row.text-center
+    timer( countdown='60', interval='1000')
+      span.gameLetter {{countdown}}
+      .container
+        .progress
+          .progress-bar.progress-bar-striped.progress-bar-danger.active(style='min-width: 2em;height: 30px;width: {{progressBar}}%') Remaining time : {{countdown}} second{{secondsS}} ({{progressBar}}%). Activity? {{displayProgressActive}}
+    .text-center
       span.gameLetter(ng-repeat='letter in onDeck.scrambled track by $index' ng-class='{lockedIn: isLocked($index)}') {{letter}} 
     

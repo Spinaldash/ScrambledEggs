@@ -11,7 +11,7 @@ angular.module('kensu')
   // Make the board recieve key commands
   window.onload = function(){
     document.onkeypress = function(e){
-      var key = code(e);
+      var key = codeToLetter(e);
       // on KeyCommand, rearrange onDeck.scrambled and increment letterGuessIndex
       letterGuessIndex = guessLetter(key, letterGuessIndex);
     };
@@ -67,7 +67,8 @@ angular.module('kensu')
     return currentIndex;
   }
 
-  function code(e){
+
+  function codeToLetter(e){
     e = e || window.event;
     return (String.fromCharCode(e.keyCode).toUpperCase() || String.fromCharCode(e.which).toUpperCase());
   }

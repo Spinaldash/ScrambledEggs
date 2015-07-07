@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('kensu', ['firebase', 'ui.router']);
+angular.module('kensu', ['firebase', 'ui.router', 'timer']);
