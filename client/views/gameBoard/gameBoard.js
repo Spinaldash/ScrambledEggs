@@ -11,11 +11,16 @@ angular.module('kensu')
         return wordObject.word
       });
       console.log($scope.wordList);
+      serveWord($scope.wordList);
     })
 
 
   function serveWord(wordsArray){
     $scope.onDeck = wordsArray.shift();
+    if (!$scope.onDeck){
+      console.log('you win');
+    }
+    console.log($scope.wordList);
   }
 
 });
