@@ -12,7 +12,17 @@ angular.module('kensu')
       });
       console.log($scope.wordList);
       serveNextWord($scope.wordList);
+
+
     })
+  // Make the board recieve key commands
+  window.onload = function(){
+    document.onkeypress = function(e){
+    var key = code(e);
+    // do something with key
+    console.log("key is: ", key);
+    };
+  };
 
   // This function takes a word from the array and scrambles and serves it
   function serveNextWord(wordsArray){
@@ -22,6 +32,23 @@ angular.module('kensu')
       alert('you win');
     }
     $scope.onDeck = FryingPan.scramble(inThePan)
+  }
+
+  $scope.guessLetter = function(event){
+    console.log(event);
+  }
+
+  function activateBoard(){
+    document.getElementById('gameboard').onkeypress = letterPress;
+  }
+
+  function letterPress(){
+
+  }
+
+  function code(e) {
+    e = e || window.event;
+    return(e.keyCode || e.which);
   }
 
 });

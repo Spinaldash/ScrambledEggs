@@ -6,6 +6,7 @@ angular.module('kensu')
   }
 
   FryingPan.scramble = function(eggWord){
+      eggWord = eggWord.toUpperCase();
       var plate = {
         original: eggWord
       }
