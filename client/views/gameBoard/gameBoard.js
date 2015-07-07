@@ -5,6 +5,7 @@ angular.module('kensu')
 
   // initalizing variables
   var letterGuessIndex = 0;
+  var lastGuessedLetter = -1;
 
   // Initialize the game by hitting the API and saving the wordList
   Wordlist.initialize()
@@ -41,24 +42,32 @@ angular.module('kensu')
     console.log('number of currentIndex:', currentIndex);
     // if a letter in the current unguessed scrambled array is guessed
     if (guessedIndex >= currentIndex){
+      console.log('guessed letter: ', key);
       //Swap the array elements
       var temp = $scope.onDeck.scrambled[currentIndex];
-      console.log('temp', temp);
+
+      lastGuessedLetter += 1;
+      currentIndex += 1;
       // Have to use $apply because this is not a $scope function
       $scope.$apply(function(){
-        $scope.onDeck.scrambled[currentIndex] = $scope.onDeck.scrambled[guessedIndex];
+        $scope.onDeck.scrambled[currentIndex - 1] = $scope.onDeck.scrambled[guessedIndex];
         $scope.onDeck.scrambled[guessedIndex] = temp;
       });
-      currentIndex += 1;
       // Check if we have guessed the number of letters in the word
+      console.log('currentIndex:', currentIndex)
+      console.log('$scope.onDeck.scrambled.length', $scope.onDeck.scrambled.length)
       if(currentIndex === $scope.onDeck.scrambled.length){
         // Check if we guessed the unscrambled word
         if($scope.onDeck.scrambled.join('') === $scope.onDeck.original){
           console.log('you guessed right!');
           serveNextWord($scope.wordList);
+          // reset lastGuessedLetter
+          lastGuessedLetter = -1;
           return 0
         } else {
-        // else the player guessed incorrectly, reset the scramble
+          // else the player guessed incorrectly, reset the scramble
+          // reset lastGuessedLetter
+          lastGuessedLetter = -1;
           $scope.$apply(function(){
             $scope.onDeck.scrambled = $scope.onDeck.unscrambled.slice();
           });
@@ -78,6 +87,16 @@ angular.module('kensu')
   function code(e) {
     e = e || window.event;
     return(String.fromCharCode(e.keyCode).toUpperCase() || String.fromCharCode(e.which).toUpperCase());
+  }
+
+  $scope.isLocked = function(letterIndex){
+    // console.log('isLocked running; letterIndex: ', letterIndex);
+    // console.log('lastGuessedLetter: ', lastGuessedLetter);
+    if(letterIndex <= lastGuessedLetter){
+      return true
+    } else {
+      return false
+    }
   }
 
 });
