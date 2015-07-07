@@ -1,37 +1,35 @@
 'use strict';
 
 angular.module('kensu')
-.factory('FryingPan', function($rootScope, $http, tenWordsUrl){
+.factory('FryingPan', function(){
   function FryingPan(){
   }
 
   FryingPan.scramble = function(eggWord){
-      eggWord = eggWord.toUpperCase();
-      var plate = {
-        original: eggWord
-      }
-      var eggArray = eggWord.split('');
-      // Scrambling an Array using the Fisher-Yates (aka Knuth) Shuffle
+    eggWord = eggWord.toUpperCase();
+    var plate = {
+      original: eggWord
+    };
+    var eggArray = eggWord.split('');
+    // Scrambling an Array using the Fisher-Yates (aka Knuth) Shuffle
 
-      var currentIndex = eggArray.length, temporaryValue, randomIndex;
+    var currentIndex = eggArray.length, temporaryValue, randomIndex;
 
-      // While there remain elements to shuffle...
-      while (0 !== currentIndex){
+    // While there remain elements to shuffle...
+    while(currentIndex !== 0){
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
 
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
+      // And swap it with the current element.
+      temporaryValue = eggArray[currentIndex];
+      eggArray[currentIndex] = eggArray[randomIndex];
+      eggArray[randomIndex] = temporaryValue;
+    }
 
-        // And swap it with the current element.
-        temporaryValue = eggArray[currentIndex];
-        eggArray[currentIndex] = eggArray[randomIndex];
-        eggArray[randomIndex] = temporaryValue;
-      }
-
-      plate.scrambled = eggArray;
-      plate.unscrambled = eggArray.slice();
-      return plate;
-
+    plate.scrambled = eggArray;
+    plate.unscrambled = eggArray.slice();
+    return plate;
   };
 
   return FryingPan;

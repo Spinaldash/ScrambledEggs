@@ -7,5 +7,5 @@ angular.module('kensu')
   $stateProvider
   // .state('home', {url: '/', templateUrl: '/views/general/home.html'})
   .state('gameBoard', {url: '/', templateUrl: '/views/gameBoard/gameBoard.html'})
-  .state('leaderboards', {url: '/leaderboards', templateUrl: '/views/general/leaderboards.html'})
+  .state('leaderboards', {url: '/leaderboards', templateUrl: '/views/general/leaderboards.html'});
 });

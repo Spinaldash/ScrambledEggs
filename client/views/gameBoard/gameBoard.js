@@ -2,7 +2,6 @@
 
 angular.module('kensu')
 .controller('GameCtrl', function($rootScope, $scope, $state, $http, Wordlist, FryingPan){
-
   // *lastGuessedLetter can be refactored out
   var letterGuessIndex, lastGuessedLetter;
 
@@ -22,12 +21,12 @@ angular.module('kensu')
   function serveNextWord(wordsArray){
     var inThePan = wordsArray.shift();
     // Make sure we get a proper word // If no word trigger win condition
-    if (!inThePan){
+    if(!inThePan){
       alert('you win');
       startGame();
-    } else {
+    } else{
       $scope.$evalAsync(function(){
-        $scope.onDeck = FryingPan.scramble(inThePan)
+        $scope.onDeck = FryingPan.scramble(inThePan);
       });
     }
   }
@@ -36,7 +35,7 @@ angular.module('kensu')
   function guessLetter(key, currentIndex){
     // detecting if the keypress was a valid guess
     var guessedIndex = $scope.onDeck.scrambled.indexOf(key, currentIndex);
-    if (guessedIndex >= currentIndex){
+    if(guessedIndex >= currentIndex){
       // yes: Swap the array elements
       var temp = $scope.onDeck.scrambled[currentIndex];
 
@@ -55,46 +54,43 @@ angular.module('kensu')
           console.log('you guessed right!');
           serveNextWord($scope.wordList);
           lastGuessedLetter = -1;
-          return 0
-        } else {
-          // else the player guessed incorrectly, reset the scramble and lastGuessedLetter
-          lastGuessedLetter = -1;
-          $scope.$apply(function(){
-            $scope.onDeck.scrambled = $scope.onDeck.unscrambled.slice();
-          });
-          return 0
+          return 0;
         }
+        // otherwise the player guessed incorrectly, reset the scramble and lastGuessedLetter
+        lastGuessedLetter = -1;
+        $scope.$apply(function(){
+          $scope.onDeck.scrambled = $scope.onDeck.unscrambled.slice();
+        });
+        return 0;
       }
     }
-    return currentIndex
+    return currentIndex;
   }
 
-  function code(e) {
+  function code(e){
     e = e || window.event;
-    return(String.fromCharCode(e.keyCode).toUpperCase() || String.fromCharCode(e.which).toUpperCase());
+    return (String.fromCharCode(e.keyCode).toUpperCase() || String.fromCharCode(e.which).toUpperCase());
   }
 
   function startGame(){
     letterGuessIndex = 0;
     lastGuessedLetter = -1;
     Wordlist.initialize()
-      .then(function(data){
-        $scope.$evalAsync(function(){
-          $scope.wordList = data.data.map(function(wordObject){
-            return wordObject.word
-          });
+    .then(function(data){
+      $scope.$evalAsync(function(){
+        $scope.wordList = data.data.map(function(wordObject){
+          return wordObject.word;
+        });
         serveNextWord($scope.wordList);
-        })
-      })
+      });
+    });
   }
 
   // Detect if a letter should have the lockedIn class
   $scope.isLocked = function(letterIndex){
     if(letterIndex <= lastGuessedLetter){
-      return true
-    } else {
-      return false
+      return true;
     }
-  }
-
+    return false;
+  };
 });
