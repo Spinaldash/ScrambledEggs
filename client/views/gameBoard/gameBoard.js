@@ -36,23 +36,22 @@ angular.module('kensu')
     });
   }
 
-  function guessLetter(key, guesses){
-    var guessedIndex = $scope.onDeck.scrambled.indexOf(key, guesses);
-    console.log('number of guesses:', guesses);
-    // if a letter in the scrambled array is guessed
-    console.log(guessedIndex);
-    if (guessedIndex !== -1){
+  function guessLetter(key, currentIndex){
+    var guessedIndex = $scope.onDeck.scrambled.indexOf(key, currentIndex);
+    console.log('number of currentIndex:', currentIndex);
+    // if a letter in the current unguessed scrambled array is guessed
+    if (guessedIndex >= currentIndex){
       //Swap the array elements
-      var temp = $scope.onDeck.scrambled[guesses];
+      var temp = $scope.onDeck.scrambled[currentIndex];
       console.log('temp', temp);
       // Have to use $apply because this is not a $scope function
       $scope.$apply(function(){
-        $scope.onDeck.scrambled[guesses] = $scope.onDeck.scrambled[guessedIndex];
+        $scope.onDeck.scrambled[currentIndex] = $scope.onDeck.scrambled[guessedIndex];
         $scope.onDeck.scrambled[guessedIndex] = temp;
       });
-      guesses += 1;
+      currentIndex += 1;
       // Check if we have guessed the number of letters in the word
-      if(guesses === $scope.onDeck.scrambled.length){
+      if(currentIndex === $scope.onDeck.scrambled.length){
         // Check if we guessed the unscrambled word
         if($scope.onDeck.scrambled.join('') === $scope.onDeck.original){
           console.log('you guessed right!');
@@ -69,7 +68,7 @@ angular.module('kensu')
 
     }
 
-    return guesses
+    return currentIndex
   }
 
   function activateBoard(){
