@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kensu')
-.controller('GameCtrl', function($rootScope, $scope, $state, $http, Wordlist, FryingPan){
+.controller('GameCtrl', function($rootScope, $scope, $state, $http, Wordlist, FryingPan, Refrigerator){
   // *lastGuessedLetter can be refactored out
   var letterGuessIndex, lastGuessedLetter;
 
@@ -22,7 +22,7 @@ angular.module('kensu')
     var inThePan = wordsArray.shift();
     // Make sure we get a proper word // If no word trigger win condition
     if(!inThePan){
-      alert('you win');
+      Refrigerator.victory();
       startGame();
     } else{
       $scope.$evalAsync(function(){
