@@ -4,17 +4,14 @@ angular.module('kensu')
 .controller('GameCtrl', function($rootScope, $scope, $state, $http, Wordlist, FryingPan){
 
   // initalizing variables
-  var letterGuess = 0;
+  var letterGuessIndex = 0;
 
   // Initialize the game by hitting the API and saving the wordList
   Wordlist.initialize()
     .then(function(data){
-      console.log(data.data);
       $scope.wordList = data.data.map(function(wordObject){
         return wordObject.word
       });
-      console.log($scope.wordList);
-
       serveNextWord($scope.wordList);
     })
 
@@ -22,8 +19,8 @@ angular.module('kensu')
   window.onload = function(){
     document.onkeypress = function(e){
       var key = code(e);
-      // on KeyCommand, rearrange onDeck.scrambled and increment letterGuess
-      letterGuess = guessLetter(key, letterGuess);
+      // on KeyCommand, rearrange onDeck.scrambled and increment letterGuessIndex
+      letterGuessIndex = guessLetter(key, letterGuessIndex);
     };
   };
 
@@ -34,11 +31,14 @@ angular.module('kensu')
     if (!inThePan){
       alert('you win');
     }
-    $scope.onDeck = FryingPan.scramble(inThePan)
+    $scope.$evalAsync(function(){
+      $scope.onDeck = FryingPan.scramble(inThePan)
+    });
   }
 
   function guessLetter(key, guesses){
-    var guessedIndex = $scope.onDeck.scrambled.indexOf(key)
+    var guessedIndex = $scope.onDeck.scrambled.indexOf(key, guesses);
+    console.log('number of guesses:', guesses);
     // if a letter in the scrambled array is guessed
     console.log(guessedIndex);
     if (guessedIndex !== -1){
@@ -51,6 +51,22 @@ angular.module('kensu')
         $scope.onDeck.scrambled[guessedIndex] = temp;
       });
       guesses += 1;
+      // Check if we have guessed the number of letters in the word
+      if(guesses === $scope.onDeck.scrambled.length){
+        // Check if we guessed the unscrambled word
+        if($scope.onDeck.scrambled.join('') === $scope.onDeck.original){
+          console.log('you guessed right!');
+          serveNextWord($scope.wordList);
+          return 0
+        } else {
+        // else the player guessed incorrectly, reset the scramble
+          $scope.$apply(function(){
+            $scope.onDeck.scrambled = $scope.onDeck.unscrambled.slice();
+          });
+          return 0
+        }
+      }
+
     }
 
     return guesses
