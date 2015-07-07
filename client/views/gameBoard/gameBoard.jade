@@ -1,7 +1,6 @@
 div(ng-controller='GameCtrl')
   h1.text-center Scrambled Eggs GameBoard
   h2.text-center Your Word:
-  h3.text-center(ng-if='onDeck') {{onDeck.scrambled}} 
   .row
     div.text-center
       span.gameLetter(ng-repeat='letter in onDeck.scrambled track by $index' ng-class='{lockedIn: isLocked($index)}') {{letter}} 

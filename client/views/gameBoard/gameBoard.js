@@ -3,8 +3,8 @@
 angular.module('kensu')
 .controller('GameCtrl', function($rootScope, $scope, $state, $http, Wordlist, FryingPan){
 
-  // initalizing variables
   var letterGuessIndex = 0;
+  // *lastGuessedLetter can be refactored out
   var lastGuessedLetter = -1;
 
   // Initialize the game by hitting the API and saving the wordList
@@ -37,13 +37,12 @@ angular.module('kensu')
     });
   }
 
+  // This function runs on keypress
   function guessLetter(key, currentIndex){
+    // detecting if the keypress was a valid guess
     var guessedIndex = $scope.onDeck.scrambled.indexOf(key, currentIndex);
-    console.log('number of currentIndex:', currentIndex);
-    // if a letter in the current unguessed scrambled array is guessed
     if (guessedIndex >= currentIndex){
-      console.log('guessed letter: ', key);
-      //Swap the array elements
+      // yes: Swap the array elements
       var temp = $scope.onDeck.scrambled[currentIndex];
 
       lastGuessedLetter += 1;
@@ -54,19 +53,16 @@ angular.module('kensu')
         $scope.onDeck.scrambled[guessedIndex] = temp;
       });
       // Check if we have guessed the number of letters in the word
-      console.log('currentIndex:', currentIndex)
-      console.log('$scope.onDeck.scrambled.length', $scope.onDeck.scrambled.length)
       if(currentIndex === $scope.onDeck.scrambled.length){
         // Check if we guessed the unscrambled word
         if($scope.onDeck.scrambled.join('') === $scope.onDeck.original){
+          // the player guessed the word correctly! Celbrate & set up for the next word
           console.log('you guessed right!');
           serveNextWord($scope.wordList);
-          // reset lastGuessedLetter
           lastGuessedLetter = -1;
           return 0
         } else {
-          // else the player guessed incorrectly, reset the scramble
-          // reset lastGuessedLetter
+          // else the player guessed incorrectly, reset the scramble and lastGuessedLetter
           lastGuessedLetter = -1;
           $scope.$apply(function(){
             $scope.onDeck.scrambled = $scope.onDeck.unscrambled.slice();
@@ -74,14 +70,8 @@ angular.module('kensu')
           return 0
         }
       }
-
     }
-
     return currentIndex
-  }
-
-  function activateBoard(){
-    document.getElementById('gameboard').onkeypress = letterPress;
   }
 
   function code(e) {
@@ -89,9 +79,8 @@ angular.module('kensu')
     return(String.fromCharCode(e.keyCode).toUpperCase() || String.fromCharCode(e.which).toUpperCase());
   }
 
+  // Detect if a letter should have the lockedIn class
   $scope.isLocked = function(letterIndex){
-    // console.log('isLocked running; letterIndex: ', letterIndex);
-    // console.log('lastGuessedLetter: ', lastGuessedLetter);
     if(letterIndex <= lastGuessedLetter){
       return true
     } else {
