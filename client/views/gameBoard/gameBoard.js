@@ -3,18 +3,11 @@
 angular.module('kensu')
 .controller('GameCtrl', function($rootScope, $scope, $state, $http, Wordlist, FryingPan){
 
-  var letterGuessIndex = 0;
   // *lastGuessedLetter can be refactored out
-  var lastGuessedLetter = -1;
+  var letterGuessIndex, lastGuessedLetter;
 
   // Initialize the game by hitting the API and saving the wordList
-  Wordlist.initialize()
-    .then(function(data){
-      $scope.wordList = data.data.map(function(wordObject){
-        return wordObject.word
-      });
-      serveNextWord($scope.wordList);
-    })
+  startGame();
 
   // Make the board recieve key commands
   window.onload = function(){
@@ -31,10 +24,12 @@ angular.module('kensu')
     // Make sure we get a proper word // If no word trigger win condition
     if (!inThePan){
       alert('you win');
+      startGame();
+    } else {
+      $scope.$evalAsync(function(){
+        $scope.onDeck = FryingPan.scramble(inThePan)
+      });
     }
-    $scope.$evalAsync(function(){
-      $scope.onDeck = FryingPan.scramble(inThePan)
-    });
   }
 
   // This function runs on keypress
@@ -77,6 +72,20 @@ angular.module('kensu')
   function code(e) {
     e = e || window.event;
     return(String.fromCharCode(e.keyCode).toUpperCase() || String.fromCharCode(e.which).toUpperCase());
+  }
+
+  function startGame(){
+    letterGuessIndex = 0;
+    lastGuessedLetter = -1;
+    Wordlist.initialize()
+      .then(function(data){
+        $scope.$evalAsync(function(){
+          $scope.wordList = data.data.map(function(wordObject){
+            return wordObject.word
+          });
+        serveNextWord($scope.wordList);
+        })
+      })
   }
 
   // Detect if a letter should have the lockedIn class

@@ -16,7 +16,7 @@ angular.module('kensu')
       var currentIndex = eggArray.length, temporaryValue, randomIndex;
 
       // While there remain elements to shuffle...
-      while (0 !== currentIndex) {
+      while (0 !== currentIndex){
 
         // Pick a remaining element...
         randomIndex = Math.floor(Math.random() * currentIndex);
