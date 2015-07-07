@@ -3,6 +3,9 @@
 angular.module('kensu')
 .controller('GameCtrl', function($rootScope, $scope, $state, $http, Wordlist, FryingPan){
 
+  // initalizing variables
+  var letterGuess = 0;
+
   // Initialize the game by hitting the API and saving the wordList
   Wordlist.initialize()
     .then(function(data){
@@ -11,16 +14,16 @@ angular.module('kensu')
         return wordObject.word
       });
       console.log($scope.wordList);
+
       serveNextWord($scope.wordList);
-
-
     })
+
   // Make the board recieve key commands
   window.onload = function(){
     document.onkeypress = function(e){
-    var key = code(e);
-    // do something with key
-    console.log("key is: ", key);
+      var key = code(e);
+      // on KeyCommand, rearrange onDeck.scrambled and increment letterGuess
+      letterGuess = guessLetter(key, letterGuess);
     };
   };
 
@@ -34,21 +37,32 @@ angular.module('kensu')
     $scope.onDeck = FryingPan.scramble(inThePan)
   }
 
-  $scope.guessLetter = function(event){
-    console.log(event);
+  function guessLetter(key, guesses){
+    var guessedIndex = $scope.onDeck.scrambled.indexOf(key)
+    // if a letter in the scrambled array is guessed
+    console.log(guessedIndex);
+    if (guessedIndex !== -1){
+      //Swap the array elements
+      var temp = $scope.onDeck.scrambled[guesses];
+      console.log('temp', temp);
+      // Have to use $apply because this is not a $scope function
+      $scope.$apply(function(){
+        $scope.onDeck.scrambled[guesses] = $scope.onDeck.scrambled[guessedIndex];
+        $scope.onDeck.scrambled[guessedIndex] = temp;
+      });
+      guesses += 1;
+    }
+
+    return guesses
   }
 
   function activateBoard(){
     document.getElementById('gameboard').onkeypress = letterPress;
   }
 
-  function letterPress(){
-
-  }
-
   function code(e) {
     e = e || window.event;
-    return(e.keyCode || e.which);
+    return(String.fromCharCode(e.keyCode).toUpperCase() || String.fromCharCode(e.which).toUpperCase());
   }
 
 });

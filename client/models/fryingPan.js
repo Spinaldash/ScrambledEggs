@@ -29,6 +29,7 @@ angular.module('kensu')
       }
 
       plate.scrambled = eggArray;
+      plate.unscrambled = eggArray.slice();
       return plate;
 
   };
