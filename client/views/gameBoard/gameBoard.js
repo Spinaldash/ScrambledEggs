@@ -4,14 +4,15 @@ angular.module('kensu')
 .controller('GameCtrl', function($rootScope, $scope, $state, Wordlist, FryingPan, Refrigerator){
   // *lastGuessedLetter can be refactored out
   var letterGuessIndex, lastGuessedLetter;
-  var TURNTIME = 1;
+  var TURNTIME = 5;
   $scope.TURNTIME = TURNTIME;
 
   // Initialize the game by hitting the API and saving the wordList
   startGame();
+  readyControls();
 
   // Make the board recieve key commands
-  window.onload = function(){
+  function readyControls(){
     document.onkeypress = function(e){
       var key = codeToLetter(e);
       // on KeyCommand, rearrange onDeck.scrambled and increment letterGuessIndex
