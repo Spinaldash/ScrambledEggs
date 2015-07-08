@@ -25,7 +25,7 @@
             name: inputValue,
             score: score
           });
-          swal("Nice!", "You wrote: " + inputValue, "success");
+          swal("Nice!", "Look for: " + inputValue + " on the Leaderboards!", "success");
         });
     };
 

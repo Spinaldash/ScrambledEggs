@@ -4,7 +4,7 @@ angular.module('kensu')
 .controller('GameCtrl', function($rootScope, $scope, $state, Wordlist, FryingPan, Refrigerator){
   // *lastGuessedLetter can be refactored out
   var letterGuessIndex, lastGuessedLetter;
-  var TURNTIME = 60;
+  var TURNTIME = 30;
   $scope.TURNTIME = TURNTIME;
 
   // Initialize the game by hitting the API and saving the wordList
@@ -28,8 +28,9 @@ angular.module('kensu')
 
     // Make sure we get a proper word // If no word trigger win condition
     if(!inThePan){
+      endGame();
       Refrigerator.victory($scope.score);
-      startGame();
+      // startGame();
     } else {
       $scope.$evalAsync(function(){
         $scope.onDeck = FryingPan.scramble(inThePan);
@@ -94,6 +95,16 @@ angular.module('kensu')
     });
   }
 
+  function endGame(){
+    document.onkeypress = function(e){
+    };
+    $scope.$evalAsync(function(){
+      delete $scope.wordList;
+      delete $scope.onDeck;
+      $scope.clearTimer();
+    })
+  }
+
   // Detect if a letter should have the lockedIn class
   $scope.isLocked = function(letterIndex){
     if(letterIndex <= lastGuessedLetter){
@@ -108,6 +119,10 @@ angular.module('kensu')
   }
   $scope.stopTimer = function (){
     $scope.$broadcast('timer-stop');
+    $scope.timerRunning = false;
+  };
+  $scope.clearTimer = function (){
+    $scope.$broadcast('timer-clear');
     $scope.timerRunning = false;
   };
 
