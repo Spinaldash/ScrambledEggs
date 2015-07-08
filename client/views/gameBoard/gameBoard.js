@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kensu')
-.controller('GameCtrl', function($rootScope, $scope, $state, $http, Wordlist, FryingPan, Refrigerator){
+.controller('GameCtrl', function($rootScope, $scope, $state, Wordlist, FryingPan, Refrigerator){
   // *lastGuessedLetter can be refactored out
   var letterGuessIndex, lastGuessedLetter;
 
@@ -20,11 +20,14 @@ angular.module('kensu')
   // This function takes a word from the array and scrambles and serves it
   function serveNextWord(wordsArray){
     var inThePan = wordsArray.shift();
+    $scope.resetTimer();
+    $scope.startTimer();
+
     // Make sure we get a proper word // If no word trigger win condition
     if(!inThePan){
-      Refrigerator.victory();
+      Refrigerator.victory($scope.score);
       startGame();
-    } else{
+    } else {
       $scope.$evalAsync(function(){
         $scope.onDeck = FryingPan.scramble(inThePan);
       });
@@ -41,17 +44,18 @@ angular.module('kensu')
 
       lastGuessedLetter += 1;
       currentIndex += 1;
-      // Have to use $apply because this is not a $scope function
+      // Have to use $apply because this is not a $angular function
       $scope.$apply(function(){
         $scope.onDeck.scrambled[currentIndex - 1] = $scope.onDeck.scrambled[guessedIndex];
         $scope.onDeck.scrambled[guessedIndex] = temp;
       });
       // Check if we have guessed the number of letters in the word
       if(currentIndex === $scope.onDeck.scrambled.length){
-        // Check if we guessed the unscrambled word
+        // Check if we guessed the correct word
         if($scope.onDeck.scrambled.join('') === $scope.onDeck.original){
           // the player guessed the word correctly! Celbrate & set up for the next word
           console.log('you guessed right!');
+          $scope.stopTimer();
           serveNextWord($scope.wordList);
           lastGuessedLetter = -1;
           return 0;
@@ -76,6 +80,7 @@ angular.module('kensu')
   function startGame(){
     letterGuessIndex = 0;
     lastGuessedLetter = -1;
+    $scope.score = 0;
     Wordlist.initialize()
     .then(function(data){
       $scope.$evalAsync(function(){
@@ -104,7 +109,12 @@ angular.module('kensu')
     $scope.timerRunning = false;
   };
 
+  $scope.resetTimer = function(){
+    $scope.$broadcast('timer-set-countdown', 60);
+  }
+
   $scope.$on('timer-stopped', function (event, data){
+      $scope.score += data.millis;
       console.log('Timer Stopped - data = ', data);
   });
 

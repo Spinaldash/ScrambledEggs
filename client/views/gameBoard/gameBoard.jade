@@ -2,6 +2,8 @@ div(ng-controller='GameCtrl')
   h1.text-center Scrambled Eggs GameBoard
   button(ng-click="startTimer()" ng-disabled="timerRunning") Start Timer
   button(ng-click="stopTimer()" ng-enabled="timerRunning") Stop Timer
+  button(ng-click="resetTimer()" ng-enabled="timerRunning") Reset Timer
+  h2.text-center Your Score: {{score}}
   h2.text-center Your Word:
   .row.text-center
     timer(autostart='false', countdown='10', interval='1000')

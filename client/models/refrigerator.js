@@ -5,10 +5,10 @@
     function Refrigerator(){
     }
 
-    Refrigerator.victory = function(){
+    Refrigerator.victory = function(score){
       window.swal({
         title: "Congratulations!",
-        text: "You scored XXX! Etch yourname into the refrigerator of destiny!",
+        text: "You scored " + score + "! Etch yourname into the refrigerator of destiny!",
         type: "input",
         showCancelButton: true,
         closeOnConfirm: false,
