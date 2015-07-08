@@ -1,7 +1,7 @@
   'use strict';
 
   angular.module('kensu')
-  .factory('Refrigerator', function(){
+  .factory('Refrigerator', function($rootScope){
     function Refrigerator(){
     }
 
@@ -21,6 +21,10 @@
             swal.showInputError("You need to write something!");
             return false
           }
+          $rootScope.fbRoot.push({
+            name: inputValue,
+            score: score
+          });
           swal("Nice!", "You wrote: " + inputValue, "success");
         });
     };

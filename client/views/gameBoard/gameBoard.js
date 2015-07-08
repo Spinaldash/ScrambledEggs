@@ -4,7 +4,7 @@ angular.module('kensu')
 .controller('GameCtrl', function($rootScope, $scope, $state, Wordlist, FryingPan, Refrigerator){
   // *lastGuessedLetter can be refactored out
   var letterGuessIndex, lastGuessedLetter;
-  var TURNTIME = 10;
+  var TURNTIME = 1;
   $scope.TURNTIME = TURNTIME;
 
   // Initialize the game by hitting the API and saving the wordList
@@ -117,6 +117,8 @@ angular.module('kensu')
   $scope.$on('timer-stopped', function (event, data){
       // When the timer stops, use the time remaining to add to the score
       $scope.score += data.millis / 1000;
+      lastGuessedLetter = -1;
+      letterGuessIndex = 0;
       serveNextWord($scope.wordList);
       // For some reason this apply is needed to run a digest cycle even though serverNextWord should be causing a digest cycle
       $scope.$apply();
