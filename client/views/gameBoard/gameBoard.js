@@ -4,7 +4,7 @@ angular.module('kensu')
 .controller('GameCtrl', function($rootScope, $scope, $state, Wordlist, FryingPan, Refrigerator){
   // *lastGuessedLetter can be refactored out
   var letterGuessIndex, lastGuessedLetter;
-  var TURNTIME = 5;
+  var TURNTIME = 60;
   $scope.TURNTIME = TURNTIME;
 
   // Initialize the game by hitting the API and saving the wordList

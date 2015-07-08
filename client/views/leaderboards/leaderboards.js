@@ -5,8 +5,7 @@ angular.module('kensu')
     // console.log(snapshot.val());
     $scope.leaderboardArray = [];
     snapshot.forEach(function(childSnapshot){
-      console.log("childSnapshot val", childSnapshot.val());
-      $scope.leaderboardArray.push(childSnapshot.val());
+      $scope.leaderboardArray.unshift(childSnapshot.val());
     });
     $scope.$apply();
   }, function (errorObject) {

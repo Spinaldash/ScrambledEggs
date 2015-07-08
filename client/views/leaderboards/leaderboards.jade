@@ -1,5 +1,4 @@
-h3.text-center leaderboards
-
+h1.text-center High Scores
 .table-responsive
   table.table.table-hover.table-responsive
     thead
@@ -8,7 +7,7 @@ h3.text-center leaderboards
         th Name
         th Score
       tr(ng-repeat='personObj in leaderboardArray track by $index')
-        th {{$index}}
+        th {{$index + 1}}
         th {{personObj.name}}
         th {{personObj.score}}
 
